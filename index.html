@@ -16,15 +16,50 @@
             margin: 0;
             color: #333;
         }
-        .heart {
-            font-size: 100px;
-            color: #ff4d4d;
-            animation: beat 1s infinite;
+        .heart-3d {
+            position: relative;
+            width: 100px;
+            height: 90px;
             margin-bottom: 20px;
+            animation: beat 1s infinite;
         }
+        .heart-3d::before,
+        .heart-3d::after {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0;
+            width: 50px;
+            height: 80px;
+            background: #ff4d4d;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+        .heart-3d::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        .heart-3d .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+        .heart-3d .sparkle:nth-child(1) { top: 20px; left: 30px; animation-delay: 0s; }
+        .heart-3d .sparkle:nth-child(2) { top: 35px; left: 45px; animation-delay: 0.5s; }
+        .heart-3d .sparkle:nth-child(3) { top: 50px; left: 25px; animation-delay: 1s; }
+        .heart-3d .sparkle:nth-child(4) { top: 30px; left: 60px; animation-delay: 1.5s; }
         @keyframes beat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
         }
         .message {
             font-size: 24px;
@@ -63,7 +98,12 @@
     </style>
 </head>
 <body>
-    <div class="heart">❤️</div>
+    <div class="heart-3d">
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+        <div class="sparkle"></div>
+    </div>
     <p class="message">
         Anh yêu em nhiều lắm! Em là người đặc biệt nhất trong cuộc đời anh. 
         Hãy cho anh cơ hội được bên em mãi mãi nhé!
