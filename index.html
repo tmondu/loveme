@@ -75,39 +75,19 @@
 
     <script>
         const noButton = document.querySelector('.no');
-        noButton.addEventListener('mouseover', function(event) {
+        noButton.addEventListener('mouseover', function() {
             const rect = this.getBoundingClientRect();
             const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
-            const minDistance = 2.5 * diagonal; // Tăng lên 2.5x
+            const minDistance = 2.5 * diagonal;
             
-            // Lấy vị trí chuột
-            const mouseX = event.clientX;
-            const mouseY = event.clientY;
+            // Tạo hướng ngẫu nhiên
+            const angle = Math.random() * 2 * Math.PI;
             
-            // Vị trí center của button
-            const buttonCenterX = rect.left + rect.width / 2;
-            const buttonCenterY = rect.top + rect.height / 2;
+            // Khoảng cách tối thiểu + biến động ngẫu nhiên
+            const distance = minDistance + Math.random() * 150;
             
-            let randomX, randomY, distance;
-            let attempts = 0;
-            
-            do {
-                // Tạo hướng ngẫu nhiên
-                const angle = Math.random() * 2 * Math.PI;
-                
-                // Khoảng cách lớn hơn
-                distance = minDistance + Math.random() * 100;
-                
-                randomX = distance * Math.cos(angle);
-                randomY = distance * Math.sin(angle);
-                
-                // Tính khoảng cách từ vị trí mới đến chuột
-                const newX = buttonCenterX + randomX;
-                const newY = buttonCenterY + randomY;
-                const distanceToMouse = Math.sqrt((newX - mouseX) ** 2 + (newY - mouseY) ** 2);
-                
-                attempts++;
-            } while (distanceToMouse < minDistance && attempts < 10); // Đảm bảo không bị lặp vô hạn
+            const randomX = distance * Math.cos(angle);
+            const randomY = distance * Math.sin(angle);
             
             this.style.transform = `translate(${randomX}px, ${randomY}px)`;
         });
