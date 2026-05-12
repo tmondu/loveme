@@ -1,135 +1,282 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thư Tỏ Tình</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Diamond Heart</title>
     <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0b0614;
+            --surface: #1f122d;
+            --accent: #ff6cc9;
+            --glow: rgba(255, 108, 201, 0.35);
+            --spark: rgba(255, 255, 255, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ffe6e6;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            color: #333;
+            text-align: center;
+            background: radial-gradient(circle at top, rgba(255, 108, 201, 0.14), transparent 28%),
+                        radial-gradient(circle at bottom right, rgba(75, 35, 150, 0.4), transparent 28%),
+                        var(--bg);
+            color: #f7eefb;
+            font-family: Inter, system-ui, sans-serif;
+            min-height: 100vh;
+            padding: 24px;
         }
-        .heart-3d {
+
+        .page {
+            width: min(95vw, 1024px);
+            display: grid;
+            gap: 28px;
+            justify-items: center;
+        }
+
+        .scene {
+            width: min(420px, 90vw);
+            aspect-ratio: 1 / 1;
+            display: grid;
+            place-items: center;
+            perspective: 1200px;
+        }
+
+        .heart-shell {
+            width: 260px;
+            height: 260px;
             position: relative;
-            width: 100px;
-            height: 90px;
-            margin-bottom: 20px;
-            animation: beat 1s infinite;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
         }
-        .heart-3d::before,
-        .heart-3d::after {
+
+        .heart {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(18deg) rotateY(-18deg);
+            animation: heartbeat 1.2s ease-in-out infinite;
+        }
+
+        .heart::before,
+        .heart::after,
+        .heart .core {
             content: '';
             position: absolute;
-            left: 50px;
-            top: 0;
-            width: 50px;
-            height: 80px;
-            background: #ff4d4d;
-            border-radius: 50px 50px 0 0;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
+            inset: 0;
+            border-radius: 50% 50% 44% 44% / 54% 54% 46% 46%;
+            background: linear-gradient(150deg, rgba(255, 220, 255, 0.98), rgba(206, 119, 255, 0.35) 20%, rgba(113, 21, 104, 0.95) 65%);
+            box-shadow: inset 0 0 28px rgba(255, 255, 255, 0.38), 0 28px 120px rgba(215, 90, 176, 0.18);
         }
-        .heart-3d::after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
+
+        .heart::before {
+            top: -18%;
+            left: 14%;
+            width: 54%;
+            height: 54%;
+            border-radius: 50% 50% 40% 40%;
+            transform: translateZ(18px) rotateZ(-25deg);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), transparent 28%),
+                        linear-gradient(145deg, rgba(251, 111, 199, 0.92), rgba(185, 45, 141, 0.98));
         }
-        .heart-3d .sparkle {
+
+        .heart::after {
+            top: -18%;
+            right: 14%;
+            width: 54%;
+            height: 54%;
+            border-radius: 50% 50% 40% 40%;
+            transform: translateZ(18px) rotateZ(25deg);
+            background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.88), transparent 28%),
+                        linear-gradient(35deg, rgba(255, 152, 241, 0.95), rgba(163, 40, 128, 0.96));
+        }
+
+        .heart .core {
+            transform: translateZ(12px) scale(0.98);
+            filter: drop-shadow(0 0 24px rgba(255, 143, 210, 0.35));
+        }
+
+        .heart::before,
+        .heart::after,
+        .heart .core {
+            mix-blend-mode: screen;
+        }
+
+        .heart::before {
+            opacity: 0.95;
+        }
+
+        .heart::after {
+            opacity: 0.95;
+        }
+
+        .heart-shell::before {
+            content: '';
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #fff;
+            inset: -20px;
             border-radius: 50%;
-            animation: sparkle 2s infinite;
+            background: radial-gradient(circle, rgba(255, 150, 214, 0.16), transparent 45%);
+            filter: blur(22px);
+            z-index: -2;
         }
-        .heart-3d .sparkle:nth-child(1) { top: 20px; left: 30px; animation-delay: 0s; }
-        .heart-3d .sparkle:nth-child(2) { top: 35px; left: 45px; animation-delay: 0.5s; }
-        .heart-3d .sparkle:nth-child(3) { top: 50px; left: 25px; animation-delay: 1s; }
-        .heart-3d .sparkle:nth-child(4) { top: 30px; left: 60px; animation-delay: 1.5s; }
-        @keyframes beat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+
+        .heart-shell::after {
+            content: '';
+            position: absolute;
+            inset: -34px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 116, 201, 0.08), transparent 48%);
+            filter: blur(48px);
+            z-index: -3;
         }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
+
+        .shine {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 35%, rgba(255, 255, 255, 0.7) 44%, rgba(255, 255, 255, 0.08) 55%, transparent 65%);
+            transform: translateX(-140%) rotateZ(10deg);
+            pointer-events: none;
+            animation: shimmer 2.8s linear infinite;
+            mix-blend-mode: screen;
         }
-        .message {
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 40px;
-            max-width: 600px;
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,255,255,0.2) 50%);
+            opacity: 0;
+            filter: blur(1px);
+            animation: drift 4s ease-in-out infinite;
         }
+
+        .particle:nth-child(1) { top: 12%; left: 15%; animation-delay: 0s; animation-duration: 4.2s; }
+        .particle:nth-child(2) { top: 32%; left: 82%; animation-delay: 0.6s; animation-duration: 4.5s; }
+        .particle:nth-child(3) { top: 68%; left: 10%; animation-delay: 1.3s; animation-duration: 4.4s; }
+        .particle:nth-child(4) { top: 75%; left: 74%; animation-delay: 1.9s; animation-duration: 4.6s; }
+        .particle:nth-child(5) { top: 53%; left: 50%; animation-delay: 0.4s; animation-duration: 4.1s; }
+
+        .title {
+            font-size: clamp(1.7rem, 2.5vw, 3rem);
+            letter-spacing: 0.04em;
+            margin: 0;
+        }
+
+        .subtitle {
+            max-width: 640px;
+            font-size: clamp(1rem, 1.2vw, 1.2rem);
+            line-height: 1.8;
+            color: #d3c1dc;
+            margin: 0;
+        }
+
         .buttons {
             display: flex;
-            gap: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
+
+        .button {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding: 14px 26px;
+            border-radius: 999px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+            backdrop-filter: blur(8px);
         }
-        .yes {
-            background-color: #4CAF50;
-            color: white;
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(255, 84, 181, 0.2);
+            background: rgba(255, 255, 255, 0.16);
         }
-        .yes:hover {
-            background-color: #45a049;
+
+        @keyframes heartbeat {
+            0%, 100% { transform: rotateX(18deg) rotateY(-18deg) scale(1); }
+            30% { transform: rotateX(18deg) rotateY(-18deg) scale(1.06); }
+            50% { transform: rotateX(18deg) rotateY(-18deg) scale(0.98); }
+            70% { transform: rotateX(18deg) rotateY(-18deg) scale(1.04); }
         }
-        .no {
-            background-color: #f44336;
-            color: white;
-            transition: all 0.3s ease;
+
+        @keyframes shimmer {
+            0% { transform: translateX(-140%) rotateZ(10deg); opacity: 0.8; }
+            50% { transform: translateX(140%) rotateZ(10deg); opacity: 1; }
+            100% { transform: translateX(260%) rotateZ(10deg); opacity: 0.8; }
         }
-        .no:hover {
-            background-color: #da190b;
-            transform: translateX(100px);
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-18px); }
+        }
+
+        @keyframes drift {
+            0%, 100% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+            20% { opacity: 1; }
+            50% { opacity: 0.55; transform: translate(calc(var(--x, 0) * 1px), calc(var(--y, 0) * 1px)) scale(1.1); }
+            80% { opacity: 0.2; }
+        }
+
+        @media (max-width: 640px) {
+            .heart-shell { width: 200px; height: 200px; }
+            .title { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
-    <div class="heart-3d">
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-    </div>
-    <p class="message">
-        Anh yêu em nhiều lắm! Em là người đặc biệt nhất trong cuộc đời anh. 
-        Hãy cho anh cơ hội được bên em mãi mãi nhé!
-    </p>
-    <div class="buttons">
-        <button class="yes" onclick="alert('Yay! Anh yêu em!')">Yes</button>
-        <button class="no" onclick="alert('Không sao, anh vẫn yêu em!')">No</button>
+    <div class="page">
+        <div class="scene">
+            <div class="heart-shell" id="heartShell">
+                <div class="heart"></div>
+                <div class="shine"></div>
+                <span class="particle" style="--x: -16; --y: -32;"></span>
+                <span class="particle" style="--x: 18; --y: -42;"></span>
+                <span class="particle" style="--x: -24; --y: 38;"></span>
+                <span class="particle" style="--x: 22; --y: 40;"></span>
+                <span class="particle" style="--x: 0; --y: 54;"></span>
+            </div>
+        </div>
+
+        <div>
+            <h1 class="title">Trái tim kim cương</h1>
+            <p class="subtitle">Một trái tim 3D lấp lánh, đập nhịp như một viên pha lê phát sáng. Mở ngay trong trình duyệt, không dùng thư viện ngoài.</p>
+        </div>
+
+        <div class="buttons">
+            <button class="button" onclick="alert('Yêu rồi thì phải giữ trọn!')">Yes</button>
+            <button class="button" onclick="alert('Dù sao anh vẫn giữ trái tim này cho em!')">No</button>
+        </div>
     </div>
 
     <script>
-        const noButton = document.querySelector('.no');
-        noButton.addEventListener('mouseover', function() {
-            const rect = this.getBoundingClientRect();
-            const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
-            const minDistance = 2.5 * diagonal;
-            
-            // Tạo hướng ngẫu nhiên
-            const angle = Math.random() * 2 * Math.PI;
-            
-            // Khoảng cách tối thiểu + biến động ngẫu nhiên
-            const distance = minDistance + Math.random() * 150;
-            
-            const randomX = distance * Math.cos(angle);
-            const randomY = distance * Math.sin(angle);
-            
-            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        const heartShell = document.getElementById('heartShell');
+
+        heartShell.addEventListener('mousemove', (event) => {
+            const rect = heartShell.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width - 0.5;
+            const y = (event.clientY - rect.top) / rect.height - 0.5;
+            const rotateY = x * 18;
+            const rotateX = -y * 18;
+            heartShell.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        heartShell.addEventListener('mouseleave', () => {
+            heartShell.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
         });
     </script>
 </body>
