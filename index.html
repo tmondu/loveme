@@ -54,9 +54,11 @@
         .no {
             background-color: #f44336;
             color: white;
+            transition: all 0.3s ease;
         }
         .no:hover {
             background-color: #da190b;
+            transform: translateX(100px);
         }
     </style>
 </head>
@@ -70,5 +72,14 @@
         <button class="yes" onclick="alert('Yay! Anh yêu em!')">Yes</button>
         <button class="no" onclick="alert('Không sao, anh vẫn yêu em!')">No</button>
     </div>
+
+    <script>
+        const noButton = document.querySelector('.no');
+        noButton.addEventListener('mouseover', function() {
+            const randomX = Math.random() * 200 - 100; // -100 to 100
+            const randomY = Math.random() * 200 - 100; // -100 to 100
+            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        });
+    </script>
 </body>
 </html>
