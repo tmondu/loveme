@@ -76,8 +76,19 @@
     <script>
         const noButton = document.querySelector('.no');
         noButton.addEventListener('mouseover', function() {
-            const randomX = Math.random() * 200 - 100; // -100 to 100
-            const randomY = Math.random() * 200 - 100; // -100 to 100
+            const rect = this.getBoundingClientRect();
+            const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
+            const minDistance = 1.5 * diagonal;
+            
+            // Tạo hướng ngẫu nhiên
+            const angle = Math.random() * 2 * Math.PI;
+            
+            // Khoảng cách tối thiểu + chút biến động
+            const distance = minDistance + Math.random() * 50;
+            
+            const randomX = distance * Math.cos(angle);
+            const randomY = distance * Math.sin(angle);
+            
             this.style.transform = `translate(${randomX}px, ${randomY}px)`;
         });
     </script>
