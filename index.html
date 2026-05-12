@@ -259,7 +259,7 @@
 
         <div class="buttons">
             <button class="button" onclick="alert('Yêu rồi thì phải giữ trọn!')">Yes</button>
-            <button class="button" onclick="alert('Dù sao anh vẫn giữ trái tim này cho em!')">No</button>
+            <button class="button" id="noButton" onclick="alert('Dù sao anh vẫn giữ trái tim này cho em!')">No</button>
         </div>
     </div>
 
@@ -277,6 +277,46 @@
 
         heartShell.addEventListener('mouseleave', () => {
             heartShell.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+        });
+
+        // No button escape functionality
+        const noButton = document.getElementById('noButton');
+        noButton.addEventListener('mouseover', function() {
+            const rect = this.getBoundingClientRect();
+            const diagonal = Math.sqrt(rect.width * rect.width + rect.height * rect.height);
+            const minDistance = 2.5 * diagonal;
+            
+            const padding = 40;
+            const maxX = window.innerWidth - rect.width - padding;
+            const maxY = window.innerHeight - rect.height - padding;
+            const minX = padding;
+            const minY = padding;
+            
+            let randomX, randomY;
+            let attempts = 0;
+            
+            do {
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = minDistance + Math.random() * 150;
+                
+                randomX = distance * Math.cos(angle);
+                randomY = distance * Math.sin(angle);
+                
+                // Tính vị trí mới tuyệt đối
+                let newX = rect.left + randomX;
+                let newY = rect.top + randomY;
+                
+                // Giữ trong phạm vi viewport bằng cách giới hạn
+                newX = Math.min(Math.max(newX, minX), maxX);
+                newY = Math.min(Math.max(newY, minY), maxY);
+                
+                randomX = newX - rect.left;
+                randomY = newY - rect.top;
+                
+                attempts++;
+            } while (attempts < 20 && (Math.abs(randomX) < minDistance || Math.abs(randomY) < minDistance));
+            
+            this.style.transform = `translate(${randomX}px, ${randomY}px)`;
         });
     </script>
 </body>
